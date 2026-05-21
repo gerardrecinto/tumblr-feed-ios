@@ -1,2 +1,1 @@
-# lab1
-Authors: Gerard Recinto, Daniel Sung
+# Tumblr Feed Lab\n\niOS Tumblr feed viewer built with Swift and UIKit. Fetches posts from the Tumblr API and displays them in a table view with progressive image loading.\n\n## Tech\n\n| Layer | Tech |\n|---|---|\n| Language | Swift |\n| UI | UIKit, UITableView |\n| Networking | AFNetworking (CocoaPods) |\n\n## Setup\n\n```bash\ncd lab1\npod install\nopen tumblr.xcworkspace\n```\n\nBuild and run on the iOS Simulator (Xcode 8+).\n
