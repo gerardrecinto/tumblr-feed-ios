@@ -29,9 +29,10 @@ class PhotosViewController: UIViewController, UITableViewDataSource, UITableView
 
         let frame = CGRect(x: 0, y: PhotoTableView.contentSize.height,
                            width: PhotoTableView.bounds.size.width, height: InfiniteScrollActivityView.defaultHeight)
-        loadingMoreView = InfiniteScrollActivityView(frame: frame)
-        loadingMoreView?.isHidden = true
-        PhotoTableView.addSubview(loadingMoreView!)
+        let spinner = InfiniteScrollActivityView(frame: frame)
+        spinner.isHidden = true
+        PhotoTableView.addSubview(spinner)
+        loadingMoreView = spinner
 
         var insets = PhotoTableView.contentInset
         insets.bottom += InfiniteScrollActivityView.defaultHeight
@@ -93,7 +94,9 @@ class PhotosViewController: UIViewController, UITableViewDataSource, UITableView
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "PhotoCell") as! PhotoCell
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "PhotoCell") as? PhotoCell else {
+            return UITableViewCell()
+        }
         let post = posts[indexPath.row]
         if let photos = post["photos"] as? [[String: Any]],
            let urlString = (photos.first?["original_size"] as? [String: Any])?["url"] as? String,
@@ -111,12 +114,12 @@ class PhotosViewController: UIViewController, UITableViewDataSource, UITableView
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         guard let cell = sender as? UITableViewCell,
-              let indexPath = PhotoTableView.indexPath(for: cell) else { return }
-        let vc = segue.destination as? PhotoDetailsViewController
+              let indexPath = PhotoTableView.indexPath(for: cell),
+              let vc = segue.destination as? PhotoDetailsViewController else { return }
         let post = posts[indexPath.row]
         if let photos = post["photos"] as? [[String: Any]],
            let urlString = (photos.first?["original_size"] as? [String: Any])?["url"] as? String {
-            vc?.photoUrlString = urlString
+            vc.photoUrlString = urlString
         }
     }
 }
